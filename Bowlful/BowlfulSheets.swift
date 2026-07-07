@@ -88,6 +88,11 @@ struct PetFormView: View {
     }
 }
 
+private enum LogFeedingField: Hashable {
+    case feederName
+    case foodNote
+}
+
 struct LogFeedingView: View {
     @EnvironmentObject private var store: BowlfulStore
     @Environment(\.dismiss) private var dismiss
@@ -97,17 +102,30 @@ struct LogFeedingView: View {
     @State private var feederName: String = ""
     @State private var foodNote: String = ""
 
+    @FocusState private var focusedField: LogFeedingField?
+
     var body: some View {
         NavigationStack {
             Form {
                 Section("Feeding \(pet.name)") {
                     TextField("Who's feeding?", text: $feederName)
                         .accessibilityIdentifier("feederNameField")
+                        .focused($focusedField, equals: .feederName)
                     TextField("What/how much (optional)", text: $foodNote)
                         .accessibilityIdentifier("foodNoteField")
+                        .focused($focusedField, equals: .foodNote)
                 }
             }
-            .dismissKeyboardOnTap()
+            .scrollDismissesKeyboard(.immediately)
+            .simultaneousGesture(
+                TapGesture().onEnded {
+                    focusedField = nil
+                    UIApplication.shared.sendAction(
+                        #selector(UIResponder.resignFirstResponder),
+                        to: nil, from: nil, for: nil
+                    )
+                }
+            )
             .navigationTitle("Log Feeding")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
