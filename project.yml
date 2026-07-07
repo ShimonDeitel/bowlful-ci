@@ -1,0 +1,75 @@
+name: Bowlful
+options:
+  bundleIdPrefix: com.shimondeitel.bowlful
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+settings:
+  base:
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "5.0"
+    DEVELOPMENT_TEAM: "W7Q885Q59C"
+    CODE_SIGN_STYLE: Automatic
+    IPHONEOS_DEPLOYMENT_TARGET: "17.0"
+    TARGETED_DEVICE_FAMILY: "1"
+    ENABLE_USER_SCRIPT_SANDBOXING: "YES"
+targets:
+  Bowlful:
+    type: application
+    platform: iOS
+    sources:
+      - path: Bowlful
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.shimondeitel.bowlful
+        TARGETED_DEVICE_FAMILY: "1"
+        INFOPLIST_FILE: Bowlful/Info.plist
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        ENABLE_PREVIEWS: "YES"
+        GENERATE_INFOPLIST_FILE: "NO"
+  BowlfulTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: BowlfulTests
+      - path: Bowlful.storekit
+    dependencies:
+      - target: Bowlful
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.shimondeitel.bowlful.tests
+        GENERATE_INFOPLIST_FILE: "YES"
+        TARGETED_DEVICE_FAMILY: "1"
+  BowlfulUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: BowlfulUITests
+    dependencies:
+      - target: Bowlful
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.shimondeitel.bowlful.uitests
+        GENERATE_INFOPLIST_FILE: "YES"
+        TARGETED_DEVICE_FAMILY: "1"
+schemes:
+  Bowlful:
+    build:
+      targets:
+        Bowlful: all
+        BowlfulTests: [test]
+        BowlfulUITests: [test]
+    run:
+      config: Debug
+      storeKitConfiguration: Bowlful.storekit
+    test:
+      config: Debug
+      storeKitConfiguration: Bowlful.storekit
+      targets:
+        - BowlfulTests
+        - BowlfulUITests
+    archive:
+      config: Release
