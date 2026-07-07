@@ -154,7 +154,12 @@ final class BowlfulUITests: XCTestCase {
         XCTAssertTrue(feederField.waitForExistence(timeout: 12))
         feederField.tap()
         feederField.typeText("Jamie")
-        XCTAssertTrue(feederField.value as? String == "Jamie")
+
+        let typedPredicate = NSPredicate { _, _ in
+            feederField.value as? String == "Jamie"
+        }
+        let typedExpectation = XCTNSPredicateExpectation(predicate: typedPredicate, object: nil)
+        XCTAssertEqual(XCTWaiter().wait(for: [typedExpectation], timeout: 6), .completed, "Typed text 'Jamie' never committed to feederNameField")
 
         // Tap a real Form section header/label (never navigationBars.firstMatch)
         // to trigger the outer simultaneousGesture keyboard dismiss.
